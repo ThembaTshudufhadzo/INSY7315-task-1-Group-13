@@ -1,0 +1,148 @@
+@model UbuhlebethuConnectPro.Web.Models.QuoteRequest
+@{
+    ViewData["Title"] = "Quotation — " + Model.Reference;
+    string statusBadge = Model.Status switch
+    {
+        "Approved" => "badge-success",
+        "Paid"     => "badge-success",
+        "Invoiced" => "badge-primary",
+        "Reviewed" => "badge-info",
+        "Submitted"=> "badge-warning",
+        _          => "badge-neutral"
+    };
+}
+
+<!-- Back nav -->
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+    <a asp-controller="Dashboard" asp-action="ClientPortal" class="btn btn-secondary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back to Portal
+    </a>
+    <div style="font-size:0.78rem; color:var(--text-muted);">
+        Client Portal &rsaquo; Quotations &rsaquo; <strong style="color:var(--text-primary);">@Model.Reference</strong>
+    </div>
+</div>
+
+<!-- Page header -->
+<div class="page-header" style="margin-bottom:16px;">
+    <div>
+        <h1 class="page-title">Quotation @Model.Reference</h1>
+        <p class="page-subtitle">Submitted @Model.RequestDate.ToLocalTime().ToString("dd MMM yyyy")</p>
+    </div>
+    <div class="page-actions">
+        <span class="badge @statusBadge" style="font-size:0.75rem; padding:5px 12px;">@Model.Status</span>
+        @if (Model.Status == "Approved" || Model.Status == "Invoiced")
+        {
+            <button class="btn btn-action-green btn-sm" onclick="alert('Redirecting to payment gateway...')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-right:4px;">
+                    <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+                Make Payment
+            </button>
+        }
+        @if (Model.InvoiceId.HasValue)
+        {
+            <a asp-controller="Invoice" asp-action="Preview" asp-route-id="@Model.InvoiceId"
+               class="btn btn-secondary btn-sm">Preview Invoice</a>
+            <a asp-controller="Invoice" asp-action="Download" asp-route-id="@Model.InvoiceId"
+               class="btn btn-primary btn-sm">Download Invoice</a>
+        }
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; align-items:start;">
+
+    <!-- Quotation Details -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Quotation Details</span>
+        </div>
+        <div class="card-body" style="padding:0;">
+            <div style="padding:0 20px;">
+                <div class="detail-field">
+                    <div class="detail-key">Reference</div>
+                    <div class="detail-val td-primary">@Model.Reference</div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-key">Client</div>
+                    <div class="detail-val">@Model.ClientName</div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-key">Project Type</div>
+                    <div class="detail-val">@Model.ProjectType</div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-key">Site Location</div>
+                    <div class="detail-val">@Model.SiteLocation</div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-key">Estimate</div>
+                    <div class="detail-val fw-600" style="color:var(--color-primary); font-size:0.9rem;">
+                        R @Model.EstimatedBudget.ToString("N2")
+                    </div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-key">Status</div>
+                    <div class="detail-val"><span class="badge @statusBadge">@Model.Status</span></div>
+                </div>
+                <div class="detail-field">
+                    <div class="detail-key">Date Submitted</div>
+                    <div class="detail-val">@Model.RequestDate.ToLocalTime().ToString("dd MMM yyyy, HH:mm")</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scope & Actions -->
+    <div>
+        <div class="card mb-3">
+            <div class="card-header">
+                <span class="card-title">Scope of Work</span>
+            </div>
+            <div class="card-body">
+                <div style="font-size:0.82rem; color:var(--text-secondary); line-height:1.6;">
+                    @(string.IsNullOrEmpty(Model.ProjectDescription) ? "No scope description provided." : Model.ProjectDescription)
+                </div>
+            </div>
+        </div>
+
+        @if (Model.IsPaid)
+        {
+            <div class="alert alert-success">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px; margin-right:6px;">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Payment received. Invoice ID: #@Model.InvoiceId
+            </div>
+        }
+        else if (Model.Status == "Approved" || Model.Status == "Invoiced")
+        {
+            <div class="card" style="background:var(--color-success-bg); border-color:#bbf7d0;">
+                <div class="card-body">
+                    <div style="font-size:0.78rem; font-weight:700; color:var(--color-success); margin-bottom:8px;">Quotation Approved</div>
+                    <div style="font-size:0.72rem; color:var(--text-secondary); margin-bottom:12px; line-height:1.5;">
+                        Your quotation has been approved. An invoice will be issued upon project commencement.
+                    </div>
+                    <form method="post" asp-action="MarkPaid" asp-route-id="@Model.Id">
+                        <button type="submit" class="btn btn-success btn-sm">Mark as Paid (Prototype)</button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="card" style="background:var(--color-content-bg); border:1px solid var(--color-border);">
+                <div class="card-body">
+                    <div style="font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Awaiting Review</div>
+                    <div style="font-size:0.72rem; color:var(--text-muted); line-height:1.5;">
+                        Your quotation request has been received and is under review by our quantity surveying team.
+                        Expected response within 48 hours.
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

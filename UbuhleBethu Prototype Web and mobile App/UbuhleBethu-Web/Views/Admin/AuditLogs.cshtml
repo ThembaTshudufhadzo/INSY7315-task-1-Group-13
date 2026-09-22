@@ -1,0 +1,107 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Audit Log";
+    var items = Model.Items as IEnumerable<UbuhlebethuConnectPro.Web.Models.AuditLog> ?? new List<UbuhlebethuConnectPro.Web.Models.AuditLog>();
+    int page = Model.Page;
+    int totalPages = Model.TotalPages;
+    string query = Model.Query ?? "";
+}
+
+<div class="page-header d-flex justify-content-between align-items-center">
+    <div>
+        <h1 class="page-title">System Audit Log</h1>
+        <p class="page-subtitle">Complete trail of all administrative actions in the system</p>
+    </div>
+    <div class="page-actions">
+        <a href="/Admin/Index" class="btn btn-secondary">Back to User Management</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="get" action="/Admin/AuditLogs" class="d-flex gap-2">
+            <input type="text" name="q" class="form-control w-50" placeholder="Filter by user, action, or details..." value="@query" />
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="/Admin/ExportAuditLogs?q=@query" class="btn btn-secondary ms-auto">Export Log</a>
+        </form>
+    </div>
+</div>
+
+<div class="data-table-wrap">
+    @if (!items.Any())
+    {
+        <div class="text-center p-5">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9b1c1c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mb-3">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            <h3 class="h5">No audit log entries found</h3>
+            <p class="text-muted">There are no matching audit log records to display.</p>
+        </div>
+    }
+    else
+    {
+        <table class="data-table w-100">
+            <thead class="data-table-header">
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Action Type</th>
+                    <th>Performed By</th>
+                    <th>Target User</th>
+                    <th>Reason</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in items)
+                {
+                    <tr>
+                        <td>@log.Timestamp.ToString("dd MMM yyyy HH:mm")</td>
+                        <td>
+                            @if (log.ActionType == "DeactivateUser")
+                            {
+                                <span class="badge badge-danger">@log.ActionType</span>
+                            }
+                            else if (log.ActionType == "ReactivateUser")
+                            {
+                                <span class="badge badge-success">@log.ActionType</span>
+                            }
+                            else if (log.ActionType == "EditRoles")
+                            {
+                                <span class="badge badge-warning">@log.ActionType</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-neutral">@log.ActionType</span>
+                            }
+                        </td>
+                        <td>@log.PerformedBy</td>
+                        <td><span class="badge badge-neutral">@log.TargetUserId</span></td>
+                        <td title="@log.Reason">
+                            @(log.Reason?.Length > 60 ? log.Reason.Substring(0, 57) + "..." : log.Reason)
+                        </td>
+                        <td title="@log.Details">
+                            @(log.Details?.Length > 60 ? log.Details.Substring(0, 57) + "..." : log.Details)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        @if (totalPages > 1)
+        {
+            <div class="card-footer d-flex justify-content-between align-items-center border-top p-3">
+                <span>Page @(page) of @totalPages</span>
+                <div>
+                    @if (page > 1)
+                    {
+                        <a href="/Admin/AuditLogs?p=@(page - 1)&q=@query" class="btn btn-sm btn-secondary">Previous</a>
+                    }
+                    @if (page < totalPages)
+                    {
+                        <a href="/Admin/AuditLogs?p=@(page + 1)&q=@query" class="btn btn-sm btn-secondary">Next</a>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>

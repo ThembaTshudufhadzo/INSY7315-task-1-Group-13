@@ -1,0 +1,134 @@
+@model UbuhlebethuConnectPro.Web.Models.QuoteRequest
+@{ ViewData["Title"] = "Review Quote — " + Model.Reference; }
+
+<div style="margin-bottom: 1rem;">
+    <a href="/Office/PendingQuotes" class="btn btn-secondary">Back to Queue</a>
+</div>
+
+<div class="page-header">
+    <h1 class="page-title">@Model.Reference</h1>
+    <p class="page-subtitle">Client Quotation Review & Estimation</p>
+</div>
+
+<div class="metric-strip">
+    <div class="metric-item">
+        <div class="kpi-label">Client</div>
+        <div class="kpi-value" style="font-size: 1.1rem;">@Model.ClientName</div>
+    </div>
+    <div class="metric-item">
+        <div class="kpi-label">Project Type</div>
+        <div class="kpi-value" style="font-size: 1.1rem;">@Model.ProjectType</div>
+    </div>
+    <div class="metric-item">
+        <div class="kpi-label">Submitted</div>
+        <div class="kpi-value" style="font-size: 1.1rem;">@Model.RequestDate.ToString("yyyy-MM-dd")</div>
+    </div>
+    <div class="metric-item">
+        <div class="kpi-label">Status</div>
+        <div class="kpi-value" style="font-size: 1.1rem;">
+            <span class="badge badge-primary">@Model.Status</span>
+        </div>
+    </div>
+</div>
+
+<div class="tab-nav">
+    <a href="#" class="tab-nav-link active">Quote Details</a>
+    <a href="#" class="tab-nav-link">AI Estimate</a>
+    <a href="#" class="tab-nav-link">Documents</a>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-top: 24px;">
+    <div class="card">
+        <div class="card-header">
+            <h2 style="margin: 0; font-size: 1.25rem;">Quotation Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="detail-field">
+                <span class="detail-key">Reference</span>
+                <span class="detail-val">@Model.Reference</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Client Name</span>
+                <span class="detail-val">@Model.ClientName</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Email</span>
+                <span class="detail-val">@Model.Email</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Phone</span>
+                <span class="detail-val">@Model.Phone</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Project Type</span>
+                <span class="detail-val">@Model.ProjectType</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Site Location</span>
+                <span class="detail-val">@Model.SiteLocation</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Budget Requested</span>
+                <span class="detail-val">@(Model.EstimatedBudget > 0 ? $"R {Model.EstimatedBudget:N2}" : "Not Specified")</span>
+            </div>
+            <div class="detail-field">
+                <span class="detail-key">Status</span>
+                <span class="detail-val"><span class="badge badge-neutral">@Model.Status</span></span>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <span class="detail-key" style="display: block; margin-bottom: 8px;">Scope of Work</span>
+                <div style="background-color: #faf8f8; border: 1px solid #ddd; padding: 16px; border-radius: 4px; min-height: 100px;">
+                    @Model.ProjectDescription
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div class="card">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0; font-size: 1.25rem;">AI Draft Estimate</h2>
+                <span class="badge badge-warning">AI Assisted</span>
+            </div>
+            <div class="card-body">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 0.9rem; color: #666; margin-bottom: 4px;">Current Estimate</div>
+                    <div style="font-size: 1.5rem; font-weight: bold; color: #9b1c1c;">
+                        @(Model.EstimatedBudget > 0 ? $"R {Model.EstimatedBudget:N2}" : "Not yet estimated")
+                    </div>
+                </div>
+                
+                <form method="post" action="/Office/GenerateDraftEstimate/@Model.Id">
+                    <button type="submit" class="btn btn-action-blue" style="width: 100%; margin-bottom: 12px;">Generate AI Draft Estimate</button>
+                </form>
+                
+                <p style="font-size: 0.85rem; color: #666; text-align: center; margin: 0;">
+                    AI analyses project type and scope to produce a starting BOQ estimate.
+                </p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 style="margin: 0; font-size: 1.25rem;">Workflow Actions</h2>
+            </div>
+            <div class="card-body">
+                @if (TempData["SuccessMessage"] != null)
+                {
+                    <div class="alert alert-success" style="margin-bottom: 16px;">
+                        @TempData["SuccessMessage"]
+                    </div>
+                }
+                
+                <form method="post" action="/Office/ApproveQuote/@Model.Id" style="margin-bottom: 12px;">
+                    <button type="submit" class="btn btn-action-green" style="width: 100%;">Approve & Create Project</button>
+                </form>
+                
+                <form method="post" action="/Office/SendInvoice/@Model.Id">
+                    <button type="submit" class="btn btn-action-blue" style="width: 100%;">Generate & Send Invoice</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

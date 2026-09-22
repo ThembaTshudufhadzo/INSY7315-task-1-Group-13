@@ -1,0 +1,71 @@
+@{ ViewData["Title"] = "Regional Distribution Map"; }
+
+<div class="page-header">
+    <h1 class="page-title">Regional Project Distribution</h1>
+    <p class="page-subtitle">Geographic overview of active construction sites</p>
+</div>
+
+<div class="metric-strip" style="margin-bottom: 2rem;">
+    <div class="metric-item">
+        <span style="font-weight: bold;">Gauteng:</span> 2 Projects
+    </div>
+    <div class="metric-item">
+        <span style="font-weight: bold;">KwaZulu-Natal:</span> 1 Project
+    </div>
+    <div class="metric-item">
+        <span style="font-weight: bold;">Limpopo:</span> 1 Project
+    </div>
+</div>
+
+<div class="card" style="margin-bottom: 2rem;">
+    <div class="card-header">
+        <h3 style="margin: 0;">South Africa &mdash; Project Sites</h3>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <div style="aspect-ratio: 16/9; width: 100%;">
+            <iframe 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                loading="lazy" 
+                allowfullscreen 
+                src="https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=South+Africa&zoom=6">
+            </iframe>
+        </div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+    <div class="card kpi-crimson">
+        <div class="card-body">
+            <h3 style="margin-top: 0;">Gauteng</h3>
+            <ul style="padding-left: 1.5rem; color: #555;">
+                <li>Job 1012 - Midrand Office Park</li>
+                <li>Job 1014 - Sandton Apartment Block</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card kpi-crimson">
+        <div class="card-body">
+            <h3 style="margin-top: 0;">KwaZulu-Natal</h3>
+            <ul style="padding-left: 1.5rem; color: #555;">
+                <li>Job 1015 - Durban Port Facility</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="card kpi-crimson">
+        <div class="card-body">
+            <h3 style="margin-top: 0;">Limpopo</h3>
+            <ul style="padding-left: 1.5rem; color: #555;">
+                <li>Job 1018 - 721 Main Street Clinic</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div style="display: flex; gap: 1rem;">
+    <a href="/Dashboard/Reports" class="btn btn-secondary">Back to Reports</a>
+    <a href="#" class="btn btn-primary" onclick="alert('Export prototype');">Export Regional Data</a>
+</div>

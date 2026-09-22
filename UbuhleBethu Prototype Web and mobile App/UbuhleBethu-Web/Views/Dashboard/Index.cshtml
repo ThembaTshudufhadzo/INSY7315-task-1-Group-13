@@ -1,0 +1,163 @@
+@model IEnumerable<UbuhlebethuConnectPro.Web.Models.Job>
+
+@{
+    ViewData["Title"] = "Office & QS Dashboard";
+    int total = Model.Count();
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Jobs In Progress</h1>
+        <p class="page-subtitle">Active construction projects — Office &amp; Quantity Surveyor view</p>
+    </div>
+    <div class="page-actions">
+        <a asp-controller="Quotation" asp-action="Create" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Create New Quotation
+        </a>
+        <a asp-controller="Dashboard" asp-action="AIReport" class="btn btn-action-blue">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;margin-right:6px;">
+                <path d="M12 2v20"></path>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            AI Draft Estimate
+        </a>
+        <button class="btn btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 6 2 18 2 18 9"/>
+                <path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/>
+                <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Export
+        </button>
+    </div>
+</div>
+
+<!-- Data Table -->
+<div class="data-table-wrap">
+    <div class="data-table-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <p class="data-table-title">
+                JOBS IN PROGRESS
+                <span>(@total)</span>
+            </p>
+        </div>
+        <div class="table-controls">
+            <div class="table-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="text" placeholder="Search jobs..." id="jobSearch" oninput="filterTable()" />
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-secondary btn-sm" onclick="toggleDropdown('settingsDrop')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/>
+                    </svg>
+                    Settings
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;">
+                        <polyline points="6 9 12 15 18 9"/>
+                    </svg>
+                </button>
+                <div class="dropdown-menu" id="settingsDrop">
+                    <div class="dropdown-header">Display Options</div>
+                    <a class="dropdown-item" href="#">Show All Columns</a>
+                    <a class="dropdown-item" href="#">Compact View</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#">Export as CSV</a>
+                    <a class="dropdown-item" href="#">Print Report</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="overflow-x:auto;">
+        <table class="data-table" id="jobsTable">
+            <thead>
+                <tr>
+                    <th class="sortable">Description</th>
+                    <th class="sortable">Type</th>
+                    <th class="sortable">Progress</th>
+                    <th class="sortable">Variance</th>
+                    <th class="sortable">Invoiced</th>
+                    <th class="sortable">Est. Budget</th>
+                    <th class="sortable">Client</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    // Determine progress color
+                    string progColor = item.Progress >= 70 ? "success" : item.Progress >= 40 ? "warning" : "primary";
+                    // Determine variance color
+                    string varColor = item.Variance <= 10 ? "success" : item.Variance <= 20 ? "warning" : "danger";
+                    // Invoiced %
+                    decimal invoicedPct = item.EstimatedCost > 0 ? Math.Min(item.InvoicedAmount / item.EstimatedCost * 100, 100) : 0;
+                    string invColor = invoicedPct >= 70 ? "success" : invoicedPct >= 40 ? "warning" : "muted";
+
+                    <tr>
+                        <td>
+                            <div class="td-primary">@item.Description</div>
+                            <div class="small text-muted">@item.JobNumber</div>
+                        </td>
+                        <td>
+                            <span class="badge badge-neutral">@item.BuildingType</span>
+                        </td>
+                        <td style="min-width:130px;">
+                            <div class="progress-bar-wrap">
+                                <div class="progress-track">
+                                    <div class="progress-fill @progColor" style="width:@(item.Progress)%;"></div>
+                                </div>
+                                <span class="progress-pct">@item.Progress%</span>
+                            </div>
+                        </td>
+                        <td style="min-width:130px;">
+                            <div class="progress-bar-wrap">
+                                <div class="progress-track">
+                                    <div class="progress-fill @varColor" style="width:@(Math.Min(item.Variance,100))%;"></div>
+                                </div>
+                                <span class="progress-pct @(item.Variance > 20 ? "text-danger" : "")">@item.Variance%</span>
+                            </div>
+                        </td>
+                        <td style="min-width:130px;">
+                            <div class="progress-bar-wrap">
+                                <div class="progress-track">
+                                    <div class="progress-fill @invColor" style="width:@((int)invoicedPct)%;"></div>
+                                </div>
+                                <span class="progress-pct">@((int)invoicedPct)%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="fw-600">R</span> @item.EstimatedCost.ToString("N0")
+                        </td>
+                        <td>@item.ClientName</td>
+                        <td>
+                            <a asp-controller="Dashboard" asp-action="Details" asp-route-id="@item.Id"
+                               class="btn btn-secondary btn-sm">
+                                View
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    function filterTable() {
+        var query = document.getElementById('jobSearch').value.toLowerCase();
+        var rows = document.querySelectorAll('#jobsTable tbody tr');
+        rows.forEach(function(row) {
+            var text = row.textContent.toLowerCase();
+            row.style.display = text.includes(query) ? '' : 'none';
+        });
+    }
+</script>
+}

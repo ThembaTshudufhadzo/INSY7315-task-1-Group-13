@@ -1,0 +1,154 @@
+@model UbuhlebethuConnectPro.Web.Models.QuoteRequest
+
+@{
+    ViewData["Title"] = "Request a Quotation";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">New Quotation Request</h1>
+        <p class="page-subtitle">Complete all fields to submit your quotation request for review</p>
+    <div class="page-actions">
+        <div class="table-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" placeholder="Search templates..." />
+        </div>
+    </div>
+</div>
+
+<div style="display:grid; grid-template-columns:2fr 1fr; gap:20px; align-items:start;">
+
+    <!-- Form -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">Project Information</span>
+            <span class="badge badge-warning">Draft</span>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" id="quoteForm">
+
+                <div style="margin-bottom:22px;">
+                    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid var(--color-border);">
+                        Client Information
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ClientName" class="form-label">Client / Organisation Name</label>
+                        <input asp-for="ClientName" class="form-control"
+                               placeholder="e.g. Department of Human Settlements / John Smith" required />
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="Email" class="form-label">Email Address</label>
+                            <input asp-for="Email" type="email" class="form-control"
+                                   placeholder="email@organisation.co.za" required />
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Phone" class="form-label">Phone / WhatsApp</label>
+                            <input asp-for="Phone" class="form-control"
+                                   placeholder="+27 xx xxx xxxx" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom:22px;">
+                    <div style="font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:12px; padding-bottom:6px; border-bottom:1px solid var(--color-border);">
+                        Project Details
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="ProjectType" class="form-label">Project Type</label>
+                            <select asp-for="ProjectType" class="form-select">
+                                <option value="">Select project type...</option>
+                                <option value="RDP / Social Housing">RDP / Social Housing</option>
+                                <option value="Civil Infrastructure">Civil Infrastructure</option>
+                                <option value="School / Clinic Build">School / Clinic Build</option>
+                                <option value="Commercial / Tenant Install">Commercial Building</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="EstimatedBudget" class="form-label">Target Budget (ZAR)</label>
+                            <div style="position:relative;">
+                                <span style="position:absolute; left:10px; top:50%; transform:translateY(-50%); font-size:0.82rem; font-weight:600; color:var(--text-muted);">R</span>
+                                <input asp-for="EstimatedBudget" type="number" class="form-control"
+                                       placeholder="0.00" style="padding-left:22px;" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="SiteLocation" class="form-label">Site Address / Province</label>
+                        <input asp-for="SiteLocation" class="form-control"
+                               placeholder="e.g. 123 Main Street, Soweto, Gauteng" />
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ProjectDescription" class="form-label">Scope of Work</label>
+                        <textarea asp-for="ProjectDescription" class="form-control" rows="4"
+                                  placeholder="Describe the full scope of work, specifications, and any special requirements..."></textarea>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:10px; justify-content:flex-end;">
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                        </svg>
+                        Submit Quotation Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Info sidebar -->
+    <div>
+        <div class="card mb-3" style="background:var(--color-content-bg); border:1px solid var(--color-border);">
+            <div class="card-body">
+                <div style="font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:10px;">How it works</div>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                        <div style="width:22px; height:22px; border-radius:50%; background:var(--color-primary); color:#fff; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</div>
+                        <div>
+                            <div style="font-size:0.78rem; font-weight:600; color:var(--text-primary);">Submit Request</div>
+                            <div style="font-size:0.72rem; color:var(--text-muted);">Complete the form and submit</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                        <div style="width:22px; height:22px; border-radius:50%; background:var(--color-primary); color:#fff; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</div>
+                        <div>
+                            <div style="font-size:0.78rem; font-weight:600; color:var(--text-primary);">QS Review</div>
+                            <div style="font-size:0.72rem; color:var(--text-muted);">Our team reviews and prepares BOQ</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                        <div style="width:22px; height:22px; border-radius:50%; background:var(--color-primary); color:#fff; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</div>
+                        <div>
+                            <div style="font-size:0.78rem; font-weight:600; color:var(--text-primary);">Receive Quote</div>
+                            <div style="font-size:0.72rem; color:var(--text-muted);">Detailed quotation sent within 48h</div>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:flex-start;">
+                        <div style="width:22px; height:22px; border-radius:50%; background:var(--color-accent); color:#fff; font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">4</div>
+                        <div>
+                            <div style="font-size:0.78rem; font-weight:600; color:var(--text-primary);">Approval &amp; Start</div>
+                            <div style="font-size:0.72rem; color:var(--text-muted);">Project kick-off upon acceptance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="background:#fff7ed; border-color:#fed7aa;">
+            <div class="card-body">
+                <div style="font-size:0.75rem; font-weight:700; color:var(--color-accent); margin-bottom:6px;">Need assistance?</div>
+                <div style="font-size:0.72rem; color:var(--text-secondary); line-height:1.5;">
+                    Contact our office team for complex projects or government tenders requiring CIDB grading documentation.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

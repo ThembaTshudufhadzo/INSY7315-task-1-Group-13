@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_field_worker"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Field Work" />
+    <item
+        android:id="@+id/nav_site_manager"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="Site Manager" />
+    <item
+        android:id="@+id/nav_office_qs"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="Office / QS" />
+    <item
+        android:id="@+id/nav_admin"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="Admin" />
+</menu>

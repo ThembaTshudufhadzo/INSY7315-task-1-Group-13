@@ -1,0 +1,33 @@
+@{
+    ViewData["Title"] = "Chatbot";
+}
+
+<div id="chatbot" class="position-fixed" style="right:20px;bottom:20px;z-index:1050;">
+    <div class="card" style="width:320px;">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div>Chatbot (Prototype)</div>
+            <button class="btn btn-sm btn-light" onclick="document.getElementById('chatbotBody').classList.toggle('d-none')">Toggle</button>
+        </div>
+        <div id="chatbotBody" class="card-body d-none">
+            <div class="small text-muted mb-2">This is a placeholder chatbot for assistance. It does not connect to AI yet.</div>
+            <div id="chatlog" style="height:180px;overflow:auto;border:1px solid #eee;padding:8px;background:#fafafa;"></div>
+            <div class="input-group mt-2">
+                <input id="chatInput" class="form-control form-control-sm" placeholder="Ask a question..." />
+                <button class="btn btn-sm btn-primary" onclick="sendChat()">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sendChat(){
+        var input = document.getElementById('chatInput');
+        var log = document.getElementById('chatlog');
+        if(!input.value) return;
+        var userMsg = document.createElement('div'); userMsg.className='text-end small mb-1'; userMsg.textContent = 'You: ' + input.value;
+        log.appendChild(userMsg);
+        var botMsg = document.createElement('div'); botMsg.className='text-start small text-muted mb-2'; botMsg.textContent = 'Bot: (prototype) We received your message: "' + input.value + '"';
+        log.appendChild(botMsg);
+        input.value=''; log.scrollTop = log.scrollHeight;
+    }
+</script>

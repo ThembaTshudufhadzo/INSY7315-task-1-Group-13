@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "AI Insights";
+}
+
+<div class="page-header">
+    <div>
+        <h1 class="page-title">AI Insights</h1>
+        <p class="page-subtitle">Machine learning analysis of project performance and financial forecasting.</p>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+    
+    <!-- Main Insights -->
+    <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div class="data-table-wrap" style="padding: 24px;">
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--color-primary); display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0 0 8px 0; color: var(--text-main); font-weight: 600;">Cost Overrun Prediction</h3>
+                    <p style="margin: 0; color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem;">
+                        The AI model predicts a <strong>12% probability of budget overrun</strong> on the <em>Sandton Highrise Extension</em> project based on historical material cost fluctuations in the Gauteng region during Q4. We recommend locking in steel procurement prices this week to mitigate risk.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="data-table-wrap" style="padding: 24px;">
+            <div style="display: flex; align-items: flex-start; gap: 16px;">
+                <div style="width: 48px; height: 48px; border-radius: 8px; background: var(--color-success); display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 24px; height: 24px;">
+                        <path d="M12 2v20"></path>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 style="margin: 0 0 8px 0; color: var(--text-main); font-weight: 600;">Revenue Growth Trend</h3>
+                    <p style="margin: 0; color: var(--text-secondary); line-height: 1.5; font-size: 0.95rem;">
+                        Quotation approval rates have increased by <strong>18%</strong> month-over-month. The AI identifies that quotes submitted with detailed structural breakdown timelines are 3x more likely to be approved within 48 hours. Consider enforcing this as a standard template.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Tools -->
+    <div class="data-table-wrap" style="padding: 24px; align-self: start;">
+        <h4 style="margin-top: 0; color: var(--text-main); font-weight: 600; margin-bottom: 16px;">Generate Report</h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px;">Use the predictive model to generate a custom forecast for specific regions or project types.</p>
+        
+        <div class="mb-3">
+            <label class="form-label" style="font-size: 0.85rem; font-weight: 500; color: var(--text-secondary);">Focus Area</label>
+            <select class="form-select">
+                <option>Financial Risk Analysis</option>
+                <option>Resource Allocation</option>
+                <option>Market Demand Forecast</option>
+            </select>
+        </div>
+        
+        <button class="btn btn-primary w-100" onclick="showToast('AI Model processing... Report will be emailed to you.')">
+            Run Analysis
+        </button>
+    </div>
+
+</div>

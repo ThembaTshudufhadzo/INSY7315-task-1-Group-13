@@ -1,0 +1,317 @@
+@model UbuhlebethuConnectPro.Web.Models.Job
+
+@{
+    ViewData["Title"] = "Job Details — " + Model.JobNumber;
+    decimal pctCollected = Model.EstimatedCost > 0
+        ? Model.InvoicedAmount / Model.EstimatedCost * 100 : 0;
+    decimal outstanding = Model.EstimatedCost - Model.InvoicedAmount;
+    string progColor = Model.Progress >= 70 ? "success" : Model.Progress >= 40 ? "warning" : "primary";
+}
+
+<!-- Back nav + breadcrumb -->
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:18px;">
+    <a asp-action="Index" class="btn btn-secondary btn-sm">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        Back
+    </a>
+    <div style="font-size:0.78rem; color:var(--text-muted);">
+        Dashboard &rsaquo; Jobs &rsaquo; <strong style="color:var(--text-primary);">@Model.JobNumber</strong>
+    </div>
+</div>
+
+<!-- Context header strip (like Buildxact top bar) -->
+<div style="background:var(--color-topbar-bg); border-radius:var(--radius-lg); padding:12px 20px; margin-bottom:16px; display:flex; align-items:center; gap:20px; flex-wrap:wrap;">
+    <div style="display:flex; align-items:center; gap:8px; color:#a8bcd0; font-size:0.78rem;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span style="color:#fff; font-weight:600;">@Model.ClientName</span>
+    </div>
+    <div style="color:#a8bcd0; font-size:0.78rem;">|</div>
+    <div style="color:#a8bcd0; font-size:0.78rem;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-2px; margin-right:4px;">
+            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+        </svg>
+        @Model.Description
+    </div>
+    <div style="color:#a8bcd0; font-size:0.78rem;">|</div>
+    <div style="color:#a8bcd0; font-size:0.78rem;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="vertical-align:-2px; margin-right:4px;">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+            <line x1="16" y1="2" x2="16" y2="6"/>
+            <line x1="8" y1="2" x2="8" y2="6"/>
+            <line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+        Job @Model.JobNumber
+    </div>
+
+    <!-- Right side metrics -->
+    <div style="margin-left:auto; display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+        <div style="text-align:right;">
+            <div style="font-size:0.62rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#a8bcd0;">Progress</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#fff;">@Model.Progress%</div>
+        </div>
+        <div style="text-align:right;">
+            <div style="font-size:0.62rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#a8bcd0;">Variance</div>
+            <div style="font-size:0.85rem; font-weight:700; color:@(Model.Variance > 20 ? "#f87171" : "#4ade80");">@Model.Variance%</div>
+        </div>
+        <div style="text-align:right;">
+            <div style="font-size:0.62rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:#a8bcd0;">Invoiced</div>
+            <div style="font-size:0.85rem; font-weight:700; color:#fff;">R @Model.InvoicedAmount.ToString("N0")</div>
+        </div>
+    </div>
+</div>
+
+<!-- Sub-tab nav -->
+<div class="tab-nav">
+    <a class="tab-nav-link active" href="#">Job Details</a>
+    <a class="tab-nav-link" href="#">Daily Logs</a>
+    <a class="tab-nav-link" href="#">Schedule</a>
+    <a class="tab-nav-link" href="#">Purchase Orders</a>
+    <a class="tab-nav-link" href="#">Documents</a>
+</div>
+
+<!-- Two-column layout -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+    <!-- Left column -->
+    <div>
+        <!-- Job Details Card -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <span class="card-title">Job Details</span>
+                <button class="btn btn-secondary btn-sm" onclick="alert('Edit mode — prototype')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit
+                </button>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <div style="padding:0 20px;">
+                    <div class="detail-field">
+                        <div class="detail-key">Number</div>
+                        <div class="detail-val">@Model.JobNumber</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Description</div>
+                        <div class="detail-val">@Model.Description</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Building Type</div>
+                        <div class="detail-val">@Model.BuildingType</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Tax Profile</div>
+                        <div class="detail-val">RSA — Standard</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Invoice Method</div>
+                        <div class="detail-val">Fixed Price (R @Model.EstimatedCost.ToString("N2"))</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Site Manager</div>
+                        <div class="detail-val">@Model.SiteManager</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">NHBRC Status</div>
+                        <div class="detail-val">
+                            @if (Model.NhbrcCompliant)
+                            {
+                                <span class="badge badge-success">Verified</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-warning">Pending</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Completion bar -->
+                <div style="padding:16px 20px; border-top:1px solid var(--color-border); margin-top:8px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:6px;">
+                        <span style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted);">Overall Completion</span>
+                        <span style="font-size:0.78rem; font-weight:700; color:var(--text-primary);">@Model.Progress%</span>
+                    </div>
+                    <div class="progress-track" style="height:10px;">
+                        <div class="progress-fill @progColor" style="width:@(Model.Progress)%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Details Card -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <span class="card-title">Client Details</span>
+                <button class="btn btn-secondary btn-sm" onclick="alert('Edit client — prototype')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit
+                </button>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <div style="padding:0 20px;">
+                    <div class="detail-field">
+                        <div class="detail-key">Name</div>
+                        <div class="detail-val">@Model.ClientName</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Address</div>
+                        <div class="detail-val">@Model.Location</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Phone</div>
+                        <div class="detail-val" style="color:var(--text-muted);">—</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Email</div>
+                        <div class="detail-val" style="color:var(--text-muted);">—</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Card -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Documents</span>
+                <button class="btn btn-secondary btn-sm" onclick="alert('Upload file — prototype')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Upload
+                </button>
+            </div>
+            <div class="card-body">
+                <ul class="doc-list">
+                    <li class="doc-item">
+                        <div class="doc-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="doc-name">NHBRC_Site_Registration.pdf</div>
+                            <div class="small text-muted">Uploaded 15 Jan 2025</div>
+                        </div>
+                        <span class="badge badge-success">Approved</span>
+                    </li>
+                    <li class="doc-item">
+                        <div class="doc-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="doc-name">BOQ_Quantity_Survey.xlsx</div>
+                            <div class="small text-muted">Uploaded 2 Feb 2025</div>
+                        </div>
+                        <span class="badge badge-primary">Uploaded</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right column -->
+    <div>
+        <!-- Work Location Card -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <span class="card-title">Work Location</span>
+                <button class="btn btn-secondary btn-sm" onclick="alert('Edit location — prototype')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Edit
+                </button>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <div style="padding:12px 20px 0; border-bottom:1px solid var(--color-border);">
+                    <div class="detail-field" style="border-bottom:none; padding-bottom:12px;">
+                        <div class="detail-key">Address</div>
+                        <div class="detail-val">
+                            <a href="https://maps.google.com?q=@Uri.EscapeDataString(Model.Location)"
+                               target="_blank" style="color:var(--color-primary);">
+                                @Model.Location, South Africa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div style="height:220px; overflow:hidden;">
+                    <iframe
+                        src="https://maps.google.com/maps?q=@Uri.EscapeDataString(Model.Location),South+Africa&t=&z=12&ie=UTF8&iwloc=&output=embed"
+                        style="width:100%; height:100%; border:0; display:block;"
+                        allowfullscreen=""
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Summary Card -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <span class="card-title">Financial Summary</span>
+            </div>
+            <div class="card-body" style="padding:0;">
+                <div style="padding:0 20px;">
+                    <div class="detail-field">
+                        <div class="detail-key">Est. Budget</div>
+                        <div class="detail-val fw-600">R @Model.EstimatedCost.ToString("N2")</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Invoiced</div>
+                        <div class="detail-val" style="color:var(--color-success); font-weight:600;">R @Model.InvoicedAmount.ToString("N2")</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">Outstanding</div>
+                        <div class="detail-val" style="color:var(--color-warning); font-weight:600;">R @outstanding.ToString("N2")</div>
+                    </div>
+                    <div class="detail-field">
+                        <div class="detail-key">% Collected</div>
+                        <div class="detail-val">
+                            <div class="progress-bar-wrap">
+                                <div class="progress-track">
+                                    <div class="progress-fill @(pctCollected >= 70 ? "success" : pctCollected >= 40 ? "warning" : "muted")"
+                                         style="width:@((int)pctCollected)%;"></div>
+                                </div>
+                                <span class="progress-pct">@((int)pctCollected)%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Card -->
+        <div class="card">
+            <div class="card-header">
+                <span class="card-title">Notes</span>
+                <button class="btn btn-secondary btn-sm" onclick="document.getElementById('noteArea').focus()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add Note
+                </button>
+            </div>
+            <div class="card-body">
+                <textarea id="noteArea" class="form-control" rows="4"
+                          placeholder="Tap to create a note (use Shift+Enter for new paragraphs)..."
+                          style="border:1px dashed var(--color-border-dark); background:var(--color-content-bg);"></textarea>
+            </div>
+        </div>
+    </div>
+
+</div>

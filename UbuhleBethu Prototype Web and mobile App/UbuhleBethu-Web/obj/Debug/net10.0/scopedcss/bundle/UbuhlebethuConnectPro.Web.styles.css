@@ -1,0 +1,14 @@
+/* /Views/Shared/_Layout.cshtml.rz.scp.css */
+/* Layout-scoped CSS overrides — these neutralize Bootstrap conflicts with our design system */
+
+/* Remove default Bootstrap body margin that conflicts with sidebar layout */
+body[b-feower3r14] {
+    margin-bottom: 0;
+}
+
+/* Neutralize Bootstrap navbar interference */
+.navbar[b-feower3r14] { display: none !important; }
+footer.footer[b-feower3r14] { display: none !important; }
+
+/* Ensure Bootstrap .container doesn't constrain sidebar content */
+.container[b-feower3r14] { max-width: none; padding: 0; margin: 0; }

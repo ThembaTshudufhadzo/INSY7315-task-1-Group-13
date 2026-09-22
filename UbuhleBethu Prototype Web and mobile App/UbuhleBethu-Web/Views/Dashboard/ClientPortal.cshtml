@@ -1,0 +1,193 @@
+@model IEnumerable<UbuhlebethuConnectPro.Web.Models.Job>
+
+@{
+    ViewData["Title"] = "Client Portal";
+    var quotes = ViewBag.ClientQuotes as IEnumerable<UbuhlebethuConnectPro.Web.Models.QuoteRequest>;
+    int activeJobs = Model.Count();
+    int quoteCount = quotes?.Count() ?? 0;
+}
+
+<!-- Page Header -->
+<div class="page-header">
+    <div>
+        <h1 class="page-title">Client Portal</h1>
+        <p class="page-subtitle">Track active projects, review quotations and invoices</p>
+    </div>
+    <div class="page-actions">
+        <a asp-controller="Quotation" asp-action="Create" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Request New Quotation
+        </a>
+    </div>
+</div>
+
+<!-- Summary Strip -->
+<div class="metric-strip">
+    <div class="metric-item">
+        <div class="metric-item-label">Active Projects</div>
+        <div class="metric-item-value">@activeJobs</div>
+    </div>
+    <div class="metric-item">
+        <div class="metric-item-label">Quotation Requests</div>
+        <div class="metric-item-value">@quoteCount</div>
+    </div>
+    @foreach (var job in Model.Take(1))
+    {
+        <div class="metric-item">
+            <div class="metric-item-label">Overall Progress</div>
+            <div class="metric-item-value">@job.Progress%</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-item-label">Total Budget</div>
+            <div class="metric-item-value">R @Model.Sum(j => j.EstimatedCost).ToString("N0")</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-item-label">Invoiced to Date</div>
+            <div class="metric-item-value">R @Model.Sum(j => j.InvoicedAmount).ToString("N0")</div>
+        </div>
+    }
+</div>
+
+<!-- Active Projects -->
+<div style="margin-bottom:24px;">
+    <div class="data-table-wrap">
+        <div class="data-table-header">
+            <p class="data-table-title">Active Projects <span>(@activeJobs)</span></p>
+        </div>
+        @foreach (var job in Model)
+        {
+            decimal pct = job.EstimatedCost > 0 ? job.InvoicedAmount / job.EstimatedCost * 100 : 0;
+            string progColor = job.Progress >= 70 ? "success" : job.Progress >= 40 ? "warning" : "primary";
+            string statusBadge = job.Progress >= 80 ? "badge-success" : job.Progress >= 40 ? "badge-info" : "badge-neutral";
+            string statusLabel = job.Progress >= 80 ? "Near Completion" : job.Progress >= 40 ? "In Progress" : "Early Stage";
+
+            <div style="padding:18px 20px; border-bottom:1px solid var(--color-border);">
+                <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap;">
+                    <div style="flex:1; min-width:200px;">
+                        <div style="display:flex; align-items:center; gap:10px; margin-bottom:4px;">
+                            <span class="td-primary" style="font-size:0.9rem;">@job.Description</span>
+                            <span class="badge @statusBadge">@statusLabel</span>
+                        </div>
+                        <div class="small text-muted">
+                            Job @job.JobNumber &nbsp;&bull;&nbsp; @job.BuildingType &nbsp;&bull;&nbsp; @job.Location
+                        </div>
+                        <div class="small text-muted" style="margin-top:2px;">
+                            Site Manager: <strong style="color:var(--text-secondary);">@job.SiteManager</strong>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; gap:32px; flex-shrink:0; flex-wrap:wrap;">
+                        <div>
+                            <div style="font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:4px;">Budget</div>
+                            <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary);">R @job.EstimatedCost.ToString("N0")</div>
+                        </div>
+                        <div>
+                            <div style="font-size:0.65rem; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:4px;">Invoiced</div>
+                            <div style="font-size:0.85rem; font-weight:700; color:var(--color-success);">R @job.InvoicedAmount.ToString("N0")</div>
+                        </div>
+                        <div>
+                            <a asp-controller="Dashboard" asp-action="Details" asp-route-id="@job.Id"
+                               class="btn btn-secondary btn-sm" style="margin-top:8px;">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:14px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                        <span style="font-size:0.72rem; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-muted);">Site Completion</span>
+                        <span style="font-size:0.72rem; font-weight:600; color:var(--text-secondary);">@job.Progress%</span>
+                    </div>
+                    <div class="progress-track" style="height:8px;">
+                        <div class="progress-fill @progColor" style="width:@(job.Progress)%;"></div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (!Model.Any())
+        {
+            <div style="padding:32px 20px; text-align:center; color:var(--text-muted); font-size:0.82rem;">
+                No active projects at this time.
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Quotation Requests -->
+<div class="data-table-wrap">
+    <div class="data-table-header">
+        <p class="data-table-title">Quotation Requests <span>(@quoteCount)</span></p>
+        <div class="table-controls">
+            <form method="get" asp-action="ClientPortal" style="display:flex; align-items:center; gap:8px;">
+                <input type="date" name="from" class="form-control form-control-sm"
+                       style="width:130px; font-size:0.78rem; padding:5px 8px;" />
+                <input type="date" name="to" class="form-control form-control-sm"
+                       style="width:130px; font-size:0.78rem; padding:5px 8px;" />
+                <select name="status" class="form-select" style="width:130px; font-size:0.78rem; padding:5px 8px;">
+                    <option value="">All Statuses</option>
+                    <option>Draft</option>
+                    <option>Submitted</option>
+                    <option>Reviewed</option>
+                    <option>Approved</option>
+                    <option>Invoiced</option>
+                    <option>Paid</option>
+                </select>
+                <button type="submit" class="btn btn-secondary btn-sm">Filter</button>
+            </form>
+        </div>
+    </div>
+
+    @if (quotes != null && quotes.Any())
+    {
+        <div style="overflow-x:auto;">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Reference</th>
+                        <th>Date Submitted</th>
+                        <th>Project Type</th>
+                        <th>Status</th>
+                        <th>Estimate</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var q in quotes)
+                    {
+                        string statusBadge = q.Status switch
+                        {
+                            "Approved" => "badge-success",
+                            "Paid"     => "badge-success",
+                            "Invoiced" => "badge-primary",
+                            "Reviewed" => "badge-info",
+                            "Submitted"=> "badge-warning",
+                            _          => "badge-neutral"
+                        };
+                        <tr>
+                            <td class="td-primary">@q.Reference</td>
+                            <td>@q.RequestDate.ToLocalTime().ToString("dd MMM yyyy")</td>
+                            <td>@q.ProjectType</td>
+                            <td><span class="badge @statusBadge">@q.Status</span></td>
+                            <td>R @q.EstimatedBudget.ToString("N0")</td>
+                            <td>
+                                <a asp-controller="Quotation" asp-action="Details" asp-route-id="@q.Id"
+                                   class="btn btn-secondary btn-sm">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div style="padding:32px 20px; text-align:center; color:var(--text-muted); font-size:0.82rem;">
+            No quotation requests found. Submit your first request using the button above.
+        </div>
+    }
+</div>
+
+@await Html.PartialAsync("_ChatbotPartial")

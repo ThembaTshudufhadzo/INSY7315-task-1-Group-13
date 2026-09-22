@@ -1,0 +1,10 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.UbuhlebethuMApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/ubuhlebethu_red</item>
+        <item name="colorSecondary">@color/ubuhlebethu_dark_red</item>
+    </style>
+
+    <style name="Theme.UbuhlebethuMApp" parent="Base.Theme.UbuhlebethuMApp" />
+</resources>
