@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\emeris\\Documents\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj": {}
+    "C:\\Users\\nkgop\\OneDrive\\Desktop\\INSY7315-task-1-Group-13\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj": {}
   },
   "projects": {
-    "C:\\Users\\emeris\\Documents\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj": {
+    "C:\\Users\\nkgop\\OneDrive\\Desktop\\INSY7315-task-1-Group-13\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\emeris\\Documents\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj",
+        "projectUniqueName": "C:\\Users\\nkgop\\OneDrive\\Desktop\\INSY7315-task-1-Group-13\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj",
         "projectName": "UbuhlebethuConnectPro.Web",
-        "projectPath": "C:\\Users\\emeris\\Documents\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj",
-        "packagesPath": "C:\\Users\\emeris\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\emeris\\Documents\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\obj\\",
+        "projectPath": "C:\\Users\\nkgop\\OneDrive\\Desktop\\INSY7315-task-1-Group-13\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\UbuhlebethuConnectPro.Web.csproj",
+        "packagesPath": "C:\\Users\\nkgop\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\nkgop\\OneDrive\\Desktop\\INSY7315-task-1-Group-13\\UbuhleBethu Prototype Web and mobile App\\UbuhleBethu-Web\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\emeris\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nkgop\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -75,6 +75,10 @@
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "QRCoder": {
+              "target": "Package",
+              "version": "[1.8.0, )"
             }
           },
           "imports": [
@@ -96,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.302/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

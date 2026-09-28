@@ -1349,5 +1349,5 @@
     }
   },
   "type": "object",
-  "SourceSegments": "C:\\Users\\emeris\\.nuget\\packages\\system.clientmodel\\1.10.0\\ConfigurationSchema.json;C:\\Users\\emeris\\.nuget\\packages\\azure.core\\1.53.0\\ConfigurationSchema.json"
+  "SourceSegments": "C:\\Users\\nkgop\\.nuget\\packages\\system.clientmodel\\1.10.0\\ConfigurationSchema.json;C:\\Users\\nkgop\\.nuget\\packages\\azure.core\\1.53.0\\ConfigurationSchema.json"
 }

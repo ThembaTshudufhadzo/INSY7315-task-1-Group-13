@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UbuhlebethuConnectPro.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f9d50005f159ec39003b726aefa640bec9b89ef7")]
 [assembly: System.Reflection.AssemblyProductAttribute("UbuhlebethuConnectPro.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UbuhlebethuConnectPro.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
